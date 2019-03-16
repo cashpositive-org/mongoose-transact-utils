@@ -1,0 +1,66 @@
+{
+  "name": "mongoose-transact-utils",
+  "version": "0.1.0",
+  "description": "Helper methods for Mongoose and MongoDB transactions",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "pack build && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "publish": "pack publish && ts-node tools/gh-pages-publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cashpositive/mongoose-transact-utils.git"
+  },
+  "keywords": [
+    "mongooose",
+    "mongodb",
+    "transactions"
+  ],
+  "prettier": {
+    "singleQuote": true,
+    "printWidth": 100
+  },
+  "@pika/pack": {
+    "pipeline": [
+      [
+        "@pika/plugin-ts-standard-pkg",
+        {
+          "exclude": [
+            "tests/**/*",
+            "examples/**/*"
+          ]
+        }
+      ],
+      [
+        "@pika/plugin-build-node"
+      ],
+      [
+        "@pika/plugin-build-types"
+      ]
+    ]
+  },
+  "devDependencies": {
+    "@pika/plugin-build-node": "^0.3.14",
+    "@pika/plugin-build-types": "^0.3.14",
+    "@pika/plugin-ts-standard-pkg": "^0.3.14",
+    "@types/mongoose": "^5.2",
+    "@types/node": "^11.11.3",
+    "mongoose": "^5.2",
+    "prettier": "^1.16.4",
+    "ts-node": "^8.0.3",
+    "tslint": "^5.14.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-config-standard": "^8.0.1",
+    "typedoc": "^0.14.2",
+    "typescript": "^3.3.3333"
+  },
+  "peerDependencies": {
+    "mongoose": "^5.2"
+  },
+  "author": "CashPositive",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cashpositive/mongoose-transact-utils/issues"
+  },
+  "homepage": "https://github.com/cashpositive/mongoose-transact-utils#readme"
+}
