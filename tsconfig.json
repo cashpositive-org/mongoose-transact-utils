@@ -3,8 +3,10 @@
     "target": "es2018",
     "module": "esnext",
     "strict": true,
+    "strictNullChecks": false,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
     "typeRoots": ["node_modules/@types"]
   },
   "include": ["src"]

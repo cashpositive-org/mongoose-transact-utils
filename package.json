@@ -5,7 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "pack build && typedoc --out docs --target es6 --theme minimal --mode file src",
-    "publish": "pack publish && ts-node tools/gh-pages-publish"
+    "publish": "pack publish && ts-node tools/gh-pages-publish",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -39,21 +40,37 @@
       ]
     ]
   },
+  "jest": {
+    "transform": {
+      ".ts": "ts-jest"
+    },
+    "testEnvironment": "node",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  },
+  "dependencies": {
+    "@types/mongoose": "^5.2",
+    "typescript": "^3.3.3333"
+  },
   "devDependencies": {
     "@pika/pack": "^0.3.5",
     "@pika/plugin-build-node": "^0.3.14",
     "@pika/plugin-build-types": "^0.3.14",
     "@pika/plugin-ts-standard-pkg": "^0.3.14",
-    "@types/mongoose": "^5.2",
+    "@types/jest": "^24.0.11",
     "@types/node": "^11.11.3",
+    "jest": "^24.5.0",
+    "jest-config": "^24.5.0",
     "mongoose": "^5.2",
     "prettier": "^1.16.4",
+    "ts-jest": "^24.0.0",
     "ts-node": "^8.0.3",
     "tslint": "^5.14.0",
     "tslint-config-prettier": "^1.18.0",
     "tslint-config-standard": "^8.0.1",
-    "typedoc": "^0.14.2",
-    "typescript": "^3.3.3333"
+    "typedoc": "^0.14.2"
   },
   "peerDependencies": {
     "mongoose": "^5.2"
