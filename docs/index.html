@@ -921,7 +921,92 @@ img { max-width: 100%; }
 	<div class="content-wrap">
 		<div class="tsd-panel tsd-typography">
 			<h1 id="mongoose-transact-utils">mongoose-transact-utils</h1>
-			<p>Helper methods for Mongoose and MongoDB transactions</p>
+			<p>Helper methods for Mongoose and MongoDB transactions. The library comes with @types for Typescript users.</p>
+			<h2 id="installation">Installation</h2>
+			<pre><code class="language-shell">npm i mongoose-transact-utils</code></pre>
+			<p>OR</p>
+			<pre><code class="language-shell">yarn add mongoose-transact-utils</code></pre>
+			<h2 id="api-reference-and-examples">API Reference and Examples</h2>
+			<h3 id="a-simple-use-case-for-transaction">A simple use case for transaction</h3>
+			<pre><code class="language-js"><span class="hljs-keyword">const</span> { runInTransaction } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mongoose-transact-utils'</span>);
+
+<span class="hljs-keyword">const</span> { User } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./models'</span>);
+
+<span class="hljs-comment">// any queries or write you want to do using transaction</span>
+(<span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-comment">// runInTransction catches any error in the callback to abort the transaction session</span>
+  <span class="hljs-comment">// and then rethrows the error for you to handle the reporting</span>
+  <span class="hljs-keyword">await</span> runInTransaction(<span class="hljs-keyword">async</span> session =&gt; {
+    <span class="hljs-comment">// run any queries here</span>
+    <span class="hljs-keyword">await</span> addFriend(<span class="hljs-string">'John'</span>, <span class="hljs-string">'Jane'</span>, session);
+  });
+
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'John and Jane are friend now!'</span>);
+})();
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">addFriend</span>(<span class="hljs-params">nameA, nameB, session</span>) </span>{
+  <span class="hljs-keyword">const</span> userA = <span class="hljs-keyword">await</span> User.find({ <span class="hljs-attr">name</span>: nameA }).session(session);
+  <span class="hljs-keyword">const</span> userB = <span class="hljs-keyword">await</span> User.find({ <span class="hljs-attr">name</span>: nameB }).session(session);
+
+  userA.friends.push(userB._id);
+  userB.friends.push(userA._id);
+
+  <span class="hljs-keyword">await</span> userA.save();
+  <span class="hljs-keyword">await</span> userB.save();
+}</code></pre>
+			<h3 id="usage-with-several-different-mongoose-apis">Usage with several different mongoose APIs</h3>
+			<pre><code class="language-js"><span class="hljs-keyword">const</span> { runInTransaction } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'mongoose-transact-utils'</span>);
+<span class="hljs-keyword">const</span> { User } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./models'</span>);
+
+<span class="hljs-keyword">async</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">example</span>(<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">await</span> runInTransaction(<span class="hljs-keyword">async</span> session =&gt; {
+    <span class="hljs-comment">// all the query methods listed here - https://mongoosejs.com/docs/queries.html</span>
+    <span class="hljs-comment">// session works with query methods as follows -</span>
+    <span class="hljs-keyword">const</span> user = <span class="hljs-keyword">await</span> User.findOne({}).session(session);
+
+    <span class="hljs-comment">// as mentioned earlier, if you use save</span>
+    <span class="hljs-comment">// it will use the associated session ($session)</span>
+    <span class="hljs-keyword">await</span> users.save();
+
+    <span class="hljs-comment">// apart from using $session to set another session</span>
+    <span class="hljs-comment">// you can also pass it as an option</span>
+    <span class="hljs-keyword">await</span> users.save({ session });
+
+    <span class="hljs-comment">// you can also use the options object for passing session</span>
+    <span class="hljs-keyword">await</span> User.find({}, <span class="hljs-literal">null</span>, { session });
+
+    <span class="hljs-comment">// works with where as well</span>
+    <span class="hljs-keyword">await</span> User.where({}).session(session);
+
+    <span class="hljs-comment">// anywhere where queryOptions object can be passed, it accepts the session</span>
+    <span class="hljs-comment">// for example</span>
+    <span class="hljs-keyword">await</span> User.create(
+      [
+        <span class="hljs-comment">/* some date */</span>
+      ],
+      { session }
+    );
+    <span class="hljs-keyword">await</span> User.bulkWrite(
+      [
+        <span class="hljs-comment">/* some update commands */</span>
+      ],
+      { session }
+    );
+
+    <span class="hljs-comment">// session can be used with aggregation as well</span>
+    <span class="hljs-keyword">await</span> User.aggregate([
+      <span class="hljs-comment">/* pipeline */</span>
+    ]).session(session);
+
+    <span class="hljs-comment">// here is an example with populate, skip, limit, etc.</span>
+    <span class="hljs-comment">// you can chain session like all other similiar methods</span>
+    <span class="hljs-keyword">await</span> User.find({})
+      .skip(<span class="hljs-number">10</span>)
+      .limit(<span class="hljs-number">10</span>)
+      .populate(<span class="hljs-string">'address'</span>)
+      .session(session);
+  });
+}</code></pre>
 		</div>
 		<div style="position:relative;"><a name="typedoc-main-index" class="tsd-anchor"></a></div>
 		<section class="tsd-panel-group tsd-index-group">
@@ -951,7 +1036,7 @@ img { max-width: 100%; }
 				<div class="tsd-signature tsd-kind-icon">Mutation<wbr>Callback<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">function</span></div>
 				<aside class="tsd-sources">
 					<ul>
-						<li>Defined in <a href="https://github.com/cashpositive/mongoose-transact-utils/blob/9f45a6f/src/index.ts#L3">index.ts:3</a></li>
+						<li>Defined in <a href="https://github.com/cashpositive/mongoose-transact-utils/blob/954a2da/src/index.ts#L3">index.ts:3</a></li>
 					</ul>
 				</aside>
 				<div class="tsd-type-declaration">
@@ -989,7 +1074,7 @@ img { max-width: 100%; }
 					<li class="tsd-description">
 						<aside class="tsd-sources">
 							<ul>
-								<li>Defined in <a href="https://github.com/cashpositive/mongoose-transact-utils/blob/9f45a6f/src/index.ts#L11">index.ts:11</a></li>
+								<li>Defined in <a href="https://github.com/cashpositive/mongoose-transact-utils/blob/954a2da/src/index.ts#L11">index.ts:11</a></li>
 							</ul>
 						</aside>
 						<div class="tsd-comment tsd-typography">
