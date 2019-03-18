@@ -1,6 +1,11 @@
 # mongoose-transact-utils
 
-Helper methods for Mongoose and MongoDB transactions. The library comes with @types for Typescript users.
+Helper methods for Mongoose and MongoDB transactions (Check out [this medium](https://medium.com/cashpositive/the-hitchhikers-guide-to-mongodb-transactions-with-mongoose-5bf8a6e22033) post to know more about it). 
+
+The library comes with @types for Typescript users. 
+
+[![NPM Version](https://img.shields.io/npm/v/mongoose-transact-utils.svg?style=flat)](https://www.npmjs.org/package/mongoose-transact-utils)
+
 
 ## Installation
 
@@ -47,59 +52,20 @@ async function addFriend(nameA, nameB, session) {
 }
 ```
 
-### Usage with several different mongoose APIs
 
-```js
-const { runInTransaction } = require('mongoose-transact-utils');
-const { User } = require('./models');
+# Contributing
+We are more than happy to accept contributions to this project in form of feedback, bug reports and pull requests.
 
-async function example() {
-  await runInTransaction(async session => {
-    // all the query methods listed here - https://mongoosejs.com/docs/queries.html
-    // session works with query methods as follows -
-    const user = await User.findOne({}).session(session);
+References: 
+- https://mongoosejs.com/docs/transactions.html
+- https://docs.mongodb.com/manual/core/write-operations-atomicity/
+- [NPM Package](https://www.npmjs.com/package/mongoose-transact-utils)
+- [Medium Post](https://medium.com/cashpositive/the-hitchhikers-guide-to-mongodb-transactions-with-mongoose-5bf8a6e22033)
 
-    // as mentioned earlier, if you use save
-    // it will use the associated session ($session)
-    await users.save();
+# Contributors
+- Soumyajit [@drenther](https://github.com/drenther)
+- Sharad [@csharad](https://github.com/csharad)
+- Nitish [@nitish-mehta](https://github.com/nitish-mehta)
+- [CashPositive](www.cashpositive.in)
 
-    // apart from using $session to set another session
-    // you can also pass it as an option
-    await users.save({ session });
 
-    // you can also use the options object for passing session
-    await User.find({}, null, { session });
-
-    // works with where as well
-    await User.where({}).session(session);
-
-    // anywhere where queryOptions object can be passed, it accepts the session
-    // for example
-    await User.create(
-      [
-        /* some date */
-      ],
-      { session }
-    );
-    await User.bulkWrite(
-      [
-        /* some update commands */
-      ],
-      { session }
-    );
-
-    // session can be used with aggregation as well
-    await User.aggregate([
-      /* pipeline */
-    ]).session(session);
-
-    // here is an example with populate, skip, limit, etc.
-    // you can chain session like all other similiar methods
-    await User.find({})
-      .skip(10)
-      .limit(10)
-      .populate('address')
-      .session(session);
-  });
-}
-```
