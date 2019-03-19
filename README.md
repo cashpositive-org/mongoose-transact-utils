@@ -21,6 +21,8 @@ yarn add mongoose-transact-utils
 
 ## API Reference and Examples
 
+[API Reference - Docs](https://cashpositive.github.io/mongoose-transact-utils/)
+
 ### A simple use case for transaction
 
 ```js
@@ -66,6 +68,6 @@ References:
 - Soumyajit [@drenther](https://github.com/drenther)
 - Sharad [@csharad](https://github.com/csharad)
 - Nitish [@nitish-mehta](https://github.com/nitish-mehta)
-- [CashPositive](www.cashpositive.in)
+- [CashPositive](https://www.cashpositive.in)
 
 
