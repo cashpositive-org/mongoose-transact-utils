@@ -43,8 +43,8 @@ const { User } = require('./models');
 })();
 
 async function addFriend(nameA, nameB, session) {
-  const userA = await User.find({ name: nameA }).session(session);
-  const userB = await User.find({ name: nameB }).session(session);
+  const userA = await User.findOne({ name: nameA }).session(session);
+  const userB = await User.findOne({ name: nameB }).session(session);
 
   userA.friends.push(userB._id);
   userB.friends.push(userA._id);
