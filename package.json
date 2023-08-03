@@ -13,9 +13,14 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "yarn lint && yarn compile",
     "lint": "eslint 'src/**/*.{js,ts}' --ignore-pattern 'src/**/__test__/*' --fix",
-    "test": "jest"
+    "test": "jest",
+    "build:fast": "yarn compile",
+    "compile": "rimraf lib && tsc -p tsconfig.json",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "prepack": "yarn build",
+    "postversion": "git push && git push --tags"
   },
   "repository": "git@github.com:movesfinancial/mongoose-transact-utils",
   "keywords": [
