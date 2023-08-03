@@ -3,15 +3,21 @@
   "version": "0.1.2",
   "description": "Helper methods for Mongoose and MongoDB transactions",
   "main": "src/index.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
-    "build": "pack build && typedoc --out docs --target es6 --theme minimal --mode file src",
+    "build": "tsc -p tsconfig.json",
     "publish": "pack publish && ts-node tools/gh-pages-publish",
     "test": "jest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cashpositive/mongoose-transact-utils.git"
-  },
+  "repository": "git@github.com:movesfinancial/mongoose-transact-utils",
   "keywords": [
     "mongooose",
     "mongodb",
@@ -20,25 +26,6 @@
   "prettier": {
     "singleQuote": true,
     "printWidth": 100
-  },
-  "@pika/pack": {
-    "pipeline": [
-      [
-        "@pika/plugin-ts-standard-pkg",
-        {
-          "exclude": [
-            "tests/**/*",
-            "examples/**/*"
-          ]
-        }
-      ],
-      [
-        "@pika/plugin-build-node"
-      ],
-      [
-        "@pika/plugin-build-types"
-      ]
-    ]
   },
   "jest": {
     "transform": {
@@ -51,19 +38,14 @@
     ]
   },
   "dependencies": {
-    "@types/mongoose": "^5.2",
-    "typescript": "^3.3.3333"
+    "typescript": "~4.4.3"
   },
   "devDependencies": {
-    "@pika/pack": "^0.3.5",
-    "@pika/plugin-build-node": "^0.3.14",
-    "@pika/plugin-build-types": "^0.3.14",
-    "@pika/plugin-ts-standard-pkg": "^0.3.14",
     "@types/jest": "^24.0.11",
-    "@types/node": "^11.11.3",
+    "@types/node": "^16.9.6",
     "jest": "^24.5.0",
     "jest-config": "^24.5.0",
-    "mongoose": "^5.2",
+    "mongoose": "^7.4.2",
     "prettier": "^1.16.4",
     "ts-jest": "^24.0.0",
     "ts-node": "^8.0.3",
@@ -73,7 +55,7 @@
     "typedoc": "^0.14.2"
   },
   "peerDependencies": {
-    "mongoose": "^5.2"
+    "mongoose": "7.4.1"
   },
   "author": "CashPositive",
   "license": "MIT",
