@@ -1,8 +1,9 @@
 {
-  "name": "mongoose-transact-utils",
+  "name": "@movesfinancial/mongoose-transact-utils",
   "version": "0.1.2",
   "description": "Helper methods for Mongoose and MongoDB transactions",
-  "main": "src/index.ts",
+  "main": "dist/index.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "dist/**/*"
   ],
