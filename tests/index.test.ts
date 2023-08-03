@@ -1,5 +1,7 @@
-import { Document, Schema, Model, model, connect, connection } from 'mongoose';
-import { runInTransaction } from '../pkg';
+import { Document, Schema, Model, model,} from 'mongoose';
+import { runInTransaction } from '../src';
+import { InMemoryMongoManager } from './InMemoryMongoManager';
+import { noopLogger } from '@movesfinancial/typescript-log';
 
 interface User extends Document {
   name: string;
@@ -14,13 +16,11 @@ const userSchema = new Schema({
 const UserModel: Model<User> = model<User>('User', userSchema);
 
 describe('Transaction', () => {
+  const mongo = new InMemoryMongoManager(noopLogger(), true)
   beforeAll(async () => {
-    await connect(
-      'mongodb://localhost:27017,localhost:27018,localhost:27019/pkg-test?replicaSet=rs'
-    );
-
+    await mongo.start();
     // @ts-ignore
-    UserModel.createCollection();
+   await UserModel.createCollection();
 
     await UserModel.deleteOne({ name: 'John' }).exec();
 
@@ -37,7 +37,7 @@ describe('Transaction', () => {
     ).rejects.toBeDefined();
 
     const john = await UserModel.findOne({ name: 'John' }).exec();
-    expect(john.balance).toEqual(50);
+    expect(john?.balance).toEqual(50);
   });
 
   it('commits changes if no error occur', async () => {
@@ -48,8 +48,8 @@ describe('Transaction', () => {
     ).resolves.toBeUndefined();
 
     const john = await UserModel.findOne({ name: 'John' }).exec();
-    expect(john.balance).toEqual(30);
+    expect(john?.balance).toEqual(30);
   });
 
-  afterAll(() => connection.close());
+  afterAll(() => mongo.stop());
 });
