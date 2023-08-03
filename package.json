@@ -22,7 +22,7 @@
     "prepack": "yarn build",
     "postversion": "git push && git push --tags"
   },
-  "repository": "git@github.com:movesfinancial/mongoose-transact-utils",
+  "repository": "git@github.com:movesfinancial/mongoose-transact-utils.git",
   "keywords": [
     "mongooose",
     "mongodb",
