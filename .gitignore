@@ -1,6 +1,8 @@
 dist
 node_modules
 .idea
+*.log
 # npm registry settings
 .npmrc*
 !.npmrc.example
+package-lock.json
