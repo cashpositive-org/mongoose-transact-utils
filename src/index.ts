@@ -1,4 +1,4 @@
-import mongoose, { ClientSession } from 'mongoose';
+import mongoose, { ClientSession, Connection } from 'mongoose';
 
 export type MutationCallback<T> = (session: ClientSession) => Promise<T>;
 
@@ -8,8 +8,14 @@ export type MutationCallback<T> = (session: ClientSession) => Promise<T>;
  *
  * @param mutations A callback which does DB writes and reads using the session.
  */
-export async function runInTransaction<T>(mutations: MutationCallback<T>): Promise<T> {
-  const session = await mongoose.startSession();
+export async function runInTransaction<T>(mutations: MutationCallback<T>, connection?: Connection): Promise<T> {
+  let session: ClientSession;
+  if(connection){
+    session =await connection.startSession()
+  } else {
+    session = await mongoose.startSession();
+  }
+
   session.startTransaction();
   try {
     const value = await mutations(session);
